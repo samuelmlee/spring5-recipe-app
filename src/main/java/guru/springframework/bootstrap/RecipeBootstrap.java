@@ -4,15 +4,16 @@ import guru.springframework.model.*;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -27,11 +28,15 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        initData();
+        recipeRepository.saveAll(getRecipe());
+        log.debug("Loading Recipe Bootstrap data");
     }
 
-    private void initData(){
+    private List<Recipe> getRecipe(){
+
+        List<Recipe> recipeList = new ArrayList<>();
 
         //get UOMs
         Optional<UnitOfMeasure> eachUomOptional = unitOfMeasureRepository.findByDescription("Each");
@@ -122,7 +127,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         perfectGuacamole.setUrl("http://www.simplyrecipes.com/recipes/perfect_guacamole/");
         perfectGuacamole.setSource("Simply Recipes");
 
-        recipeRepository.save(perfectGuacamole);
+        recipeList.add(perfectGuacamole);
 
         // Spicy chicken recipe
         Recipe spicyGrilledChicken = new Recipe();
@@ -183,6 +188,8 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         spicyGrilledChicken.setUrl("http://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
         spicyGrilledChicken.setSource("Simply Recipes");
 
-        recipeRepository.save(spicyGrilledChicken);
+        recipeList.add(spicyGrilledChicken);
+
+        return recipeList;
     }
 }
