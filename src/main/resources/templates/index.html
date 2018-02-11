@@ -28,7 +28,7 @@
         <td th:text="${recipe.servings}"></td>
         <td>
             <li th:each="ingredient : ${recipe.ingredients}">
-                <p th:text="${(ingredient.description)}"></p>
+                <p th:text="${(ingredient.amount)} + ' '+ ${(ingredient.unitOfMeasure.description)} + ' '+ ${(ingredient.description)}"></p>
             </li>
         </td>
     </tr>
