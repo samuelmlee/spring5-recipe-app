@@ -75,9 +75,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         // Perfect guacamole recipe
         Recipe perfectGuacamole = new Recipe();
 
-        Set<Category> perfectGuacamoleCateg = new HashSet<>();
-        categoryRepository.findByDescription("Mexican").ifPresent(mexicanCateg -> perfectGuacamoleCateg.add(mexicanCateg));
-        perfectGuacamole.setCategories(perfectGuacamoleCateg);
+        categoryRepository.findByDescription("Mexican").ifPresent(perfectGuacamole.getCategories()::add);
 
         perfectGuacamole.setPrepTime(10);
         perfectGuacamole.setCookTime(0);
@@ -129,10 +127,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         // Spicy chicken recipe
         Recipe spicyGrilledChicken = new Recipe();
 
-        Set<Category> spicyChickenCateg = new HashSet<>();
-        //spicyChickenCateg.add(categoryRepository.findByDescription("Mexican").get());
-        categoryRepository.findByDescription("Mexican").ifPresent(mexicanCateg -> spicyChickenCateg.add(mexicanCateg));
-        spicyGrilledChicken.setCategories(spicyChickenCateg);
+        categoryRepository.findByDescription("Mexican").ifPresent(spicyGrilledChicken.getCategories()::add);
 
         spicyGrilledChicken.setPrepTime(20);
         spicyGrilledChicken.setCookTime(15);
